@@ -35,7 +35,7 @@ if __name__ == "__main__":
     from tensorflow.examples.tutorials.mnist import input_data
 
     mnist = input_data.read_data_sets('./MNIST_data/', one_hot=True)
-    learning_rate = 0.01
+    learning_rate = 0.05
     batch_size = 128
     epochs = 10
 
@@ -44,8 +44,8 @@ if __name__ == "__main__":
 
     layer1 = fc_layer(X, 'input', (784, 1024))
     layer2 = fc_layer(layer1, 'hidden1', (1024, 1024))
-    layer3 = fc_layer(layer2, 'hidden2', (1024, 1024))
-    logits = fc_layer(layer3, 'output', (1024, 10), use_norm=False)
+    # layer3 = fc_layer(layer2, 'hidden2', (1024, 1024))
+    logits = fc_layer(layer2, 'output', (1024, 10), use_norm=False)
 
     train_loss = loss_function(logits, Y, 'train')
     val_loss = loss_function(logits, Y, 'val')
@@ -66,14 +66,22 @@ if __name__ == "__main__":
                 train_val_loss.append([loss_train, loss_val])
                 train_l += loss_train
                 val_l += loss_val
-            print('Epoch {:d}--train loss:{:f}, val loss:{:f}'.format(i+1, train_l / iter_per_epoch,
+            print('Epoch {:d}--train loss:{:f}, val loss:{:f}'.format(i + 1, train_l / iter_per_epoch,
                                                                       val_l / iter_per_epoch))
     train_val_loss = np.asarray(train_val_loss)
-    plt.plot(train_val_loss[:, 0], label='train loss')
-    plt.plot(train_val_loss[:, 1], label='val loss')
+    training = []
+    testing = []
+    for it, value in enumerate(train_val_loss):
+        if it % 10 == 0:
+            training.append([it, train_val_loss[it, 0]])
+            testing.append([it, train_val_loss[it, 1]])
+    training = np.asarray(training)
+    testing = np.asarray(testing)
+    plt.plot(training[:, 0], training[:, 1], label='train loss')
+    plt.plot(testing[:, 0], testing[:, 1], label='test loss')
     plt.legend(loc='upper right')
     plt.xlabel('Iteration')
     plt.ylabel('Loss')
     plt.title('MNIST with FNN')
-    plt.savefig('./mnist.jpg')
+    plt.savefig('./mnist.png')
     plt.show()

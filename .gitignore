@@ -1,2 +1,5 @@
 .idea/
 logs/
+*.zip
+*.pdf
+readme.md
