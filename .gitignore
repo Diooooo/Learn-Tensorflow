@@ -3,3 +3,9 @@ logs/
 *.zip
 *.pdf
 readme.md
+.DS_Store
+*.ckpt*
+*logs*
+*.npy
+*checkpoint*
+*.jpg
