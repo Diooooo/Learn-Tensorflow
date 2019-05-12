@@ -9,3 +9,5 @@ readme.md
 *.npy
 *checkpoint*
 *.jpg
+*.png
+*.ipynb

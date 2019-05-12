@@ -2,6 +2,7 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def generator(X, variables, reuse=False):
     with tf.variable_scope('generator'):
         l = dense_layer(X, 100, 256, 'g1', variables)
@@ -74,7 +75,7 @@ if __name__ == '__main__':
     # log_g = tf.reduce_mean(tf.log(g_logits + eps))
     sample_g = tf.reshape(X_sample, shape=[M, -1, 784])
     g_logits_expand = tf.expand_dims(g_logits, axis=0)
-    log_g = -tf.reduce_sum((1-sample_g) * g_logits_expand + tf.nn.softplus(-g_logits_expand), axis=[2, 3, 4])
+    log_g = -tf.reduce_sum((1 - sample_g) * g_logits_expand + tf.nn.softplus(-g_logits_expand), axis=[2, 3, 4])
 
     log_g_grad = tf.gradients(log_g, g_var)
 
@@ -109,7 +110,7 @@ if __name__ == '__main__':
             variational_lower_bound, _ = sess.run([vlb, update_d],
                                                   feed_dict={X: batch_z, Y: batch_image, X_sample: batch_sample})
             loss_g, _ = sess.run([g_loss, update_g],
-                                        feed_dict={X: batch_z, Y: batch_image, X_sample: batch_sample})
+                                 feed_dict={X: batch_z, Y: batch_image, X_sample: batch_sample})
 
             print('epoch: {}/{}, vlb: {}, g_loss: {}'.format(epoch + 1, epochs, variational_lower_bound, loss_g))
             if (epoch + 1) % 10 == 0:
@@ -117,7 +118,7 @@ if __name__ == '__main__':
                 res.append(predicted)
     res = np.asarray(res)
     plt.figure()
-    for i in range(20):
-        plt.subplot(4, 5, i + 1)
-        plt.imshow(res[i, 10].reshape(28, 28), cmap='gray')
+    for i in range(16):
+        plt.subplot(4, 4, i + 1)
+        plt.imshow(res[-1, i].reshape(28, 28), cmap='gray')
     plt.show()
